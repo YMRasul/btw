@@ -17,10 +17,20 @@ WEBHOOK_PATH = 'root/btw/to/5240442552:AAGQtUhRoxZAiKBSvHgg1nNdr1U43Vp8LkQ'
 WEBHOOK_URL = f"{WEBHOOK_HOST}{WEBHOOK_PATH}"
 
 # webserver settings
-WEBAPP_HOST = 'localhost'  # or ip
+WEBAPP_HOST = '120.0.0.1'  #'localhost'  # or ip
 WEBAPP_PORT = 3001
 
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+logging.basicConfig(
+    level=logging.DEBUG,
+    format=u'%(levelname)-8s [%(asctime)s] %(message)s'
+)
+'''
+logging.basicConfig(
+    level=logging.INFO,filename='oylikbot.log',
+    format=u'%(filename)s:%(lineno)d #%(levelname)-8s [%(asctime)s] - %(name)s - %(message)s'
+)
+'''
 
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher(bot)
@@ -36,6 +46,9 @@ async def echo(message: types.Message):
 
 
 async def on_startup(dp):
+    logger.info(">>>>>>> Start Bot oylik")
+    logger.info(">>>>>>> Connecting dbase_sqlite.db")
+    logger.info('>>>>>>> Bot oylik in online')
     await bot.set_webhook(WEBHOOK_URL)
     # insert code here to run it after start
 
@@ -51,7 +64,6 @@ async def on_shutdown(dp):
     # Close DB connection (if used)
     await dp.storage.close()
     await dp.storage.wait_closed()
-
     logging.warning('Bye!')
 
 '''
@@ -60,6 +72,7 @@ if __name__ == '__main__':
 
 '''
 if __name__ == '__main__':
+    print(WEBHOOK_PATH)
     start_webhook(
         dispatcher=dp,
         webhook_path=WEBHOOK_PATH,
